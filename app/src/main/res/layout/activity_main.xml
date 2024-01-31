@@ -11,8 +11,12 @@
         android:layout_height="match_parent">
         <EditText
             android:id="@+id/editText"
+            android:background="#FFF"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:textSize="40sp"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/keyPad"
             app:layout_constraintHeight_percent="0.5"
