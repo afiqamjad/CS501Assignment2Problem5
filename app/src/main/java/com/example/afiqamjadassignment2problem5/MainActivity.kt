@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         }
         sqrt.setOnClickListener{
             if (ans != "0.0") {
-                text.setText("v")
+                text.setText("√")
                 ans = "0.0"
             } else {
                 text.append("√")
@@ -204,6 +204,7 @@ class MainActivity : AppCompatActivity() {
             }
             var firstNum = 0.0
             var operator = ""
+            var first = true
             for(i in listNum) {
                 if (i in "+-*/" && listNum[0] == i) {
                     Toast.makeText(this, "You can't start the equation with the $i operator!",Toast.LENGTH_SHORT).show()
@@ -212,22 +213,27 @@ class MainActivity : AppCompatActivity() {
                 }
                 if (i !in "+-*/√") {
                     if (firstNum == 0.0 && operator == "") {
+                        first = false
                         firstNum = i.toDouble()
                     } else if (operator != "") {
                         when (operator) {
                             "+" -> {
+                                first = false
                                 firstNum += i.toDouble()
                                 operator = ""
                             }
                             "-" -> {
+                                first = false
                                 firstNum -= i.toDouble()
                                 operator = ""
                             }
                             "*" -> {
+                                first = false
                                 firstNum *= i.toDouble()
                                 operator = ""
                             }
                             "/" -> {
+                                first = false
                                 if (i.toDouble() == 0.0) {
                                     Toast.makeText(this, "You can't divide by 0!",Toast.LENGTH_SHORT).show()
                                     text.text.clear()
@@ -237,13 +243,16 @@ class MainActivity : AppCompatActivity() {
                                 operator = ""
                             }
                             else -> {
-                                firstNum *= sqrt(i.toDouble())
+                                if (first) {
+                                    firstNum = sqrt(i.toDouble())
+                                    first = false
+                                } else {
+                                    firstNum *= sqrt(i.toDouble())
+                                }
                                 operator = ""
                             }
                         }
                     }
-                } else if (operator == "√" && ans == "0.0s") {
-                    firstNum = sqrt(i.toDouble())
                 } else {
                     if (operator == "") {
                         operator = i
