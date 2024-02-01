@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
@@ -28,71 +29,216 @@ class MainActivity : AppCompatActivity() {
         val divide = findViewById<Button>(R.id.divide)
         val sqrt = findViewById<Button>(R.id.sqrt)
         val equals = findViewById<Button>(R.id.equals)
-
+        var ans = "0.0"
         val text = findViewById<EditText>(R.id.editText)
 
         one.setOnClickListener{
-            text.append("1")
+            if (ans != "0.0") {
+                text.setText("1")
+                ans = "0.0"
+            } else {
+                text.append("1")
+            }
         }
         two.setOnClickListener{
-            text.append("2")
+            if (ans != "0.0") {
+                text.setText("2")
+                ans = "0.0"
+            } else {
+                text.append("2")
+            }
         }
         three.setOnClickListener{
-            text.append("3")
+            if (ans != "0.0") {
+                text.setText("3")
+                ans = "0.0"
+            } else {
+                text.append("3")
+            }
         }
         four.setOnClickListener{
-            text.append("4")
+            if (ans != "0.0") {
+                text.setText("4")
+                ans = "0.0"
+            } else {
+                text.append("4")
+            }
         }
         five.setOnClickListener{
-            text.append("5")
+            if (ans != "0.0") {
+                text.setText("5")
+                ans = "0.0"
+            } else {
+                text.append("5")
+            }
         }
         six.setOnClickListener{
-            text.append("6")
+            if (ans != "0.0") {
+                text.setText("6")
+                ans = "0.0"
+            } else {
+                text.append("6")
+            }
         }
         seven.setOnClickListener{
-            text.append("7")
+            if (ans != "0.0") {
+                text.setText("7")
+                ans = "0.0"
+            } else {
+                text.append("7")
+            }
         }
         eight.setOnClickListener{
-            text.append("8")
+            if (ans != "0.0") {
+                text.setText("8")
+                ans = "0.0"
+            } else {
+                text.append("8")
+            }
         }
         nine.setOnClickListener{
-            text.append("9")
+            if (ans != "0.0") {
+                text.setText("9")
+                ans = "0.0"
+            } else {
+                text.append("9")
+            }
         }
         zero.setOnClickListener{
-            text.append("0")
+            if (ans != "0.0") {
+                text.setText("0")
+                ans = "0.0"
+            } else {
+                text.append("0")
+            }
         }
         dot.setOnClickListener {
-            text.append(".")
+            if (ans != "0.0") {
+                text.setText(".")
+                ans = "0.0"
+            } else {
+                text.append(".")
+            }
         }
         plus.setOnClickListener{
-            text.append("+")
+            if (ans != "0.0") {
+                text.setText("+")
+                ans = "0.0"
+            } else {
+                text.append("+")
+            }
         }
         times.setOnClickListener{
-            text.append("*")
+            if (ans != "0.0") {
+                text.setText("*")
+                ans = "0.0"
+            } else {
+                text.append("*")
+            }
         }
         minus.setOnClickListener{
-            text.append("-")
+            if (ans != "0.0") {
+                text.setText("-")
+                ans = "0.0"
+            } else {
+                text.append("-")
+            }
         }
         divide.setOnClickListener{
-            text.append("/")
+            if (ans != "0.0") {
+                text.setText("/")
+                ans = "0.0"
+            } else {
+                text.append("/")
+            }
         }
         sqrt.setOnClickListener{
-            text.append("√")
+            if (ans != "0.0") {
+                text.setText("v")
+                ans = "0.0"
+            } else {
+                text.append("√")
+            }
         }
         equals.setOnClickListener{
             val wholeThing = text.text.toString()
-            if (wholeThing != "") {
-                val splitted = wholeThing.split("+", "-", "*", "/", "√")
-                if (splitted[0] == "√") {
-                    if (splitted.size > 1) {
-                        val num = splitted[1].toDouble()
-                        val ans = sqrt(num)
-                        text.setText(ans.toString())
+            val listNum: MutableList<String> = mutableListOf()
+            var letterBefore = "]"
+            for (letter in wholeThing) {
+                if (letter in "0123456789.") {
+                    if (letterBefore in "+-*/√") {
+                        listNum += letter.toString()
                     } else {
-                        text.error = "Bro"
+                        if (listNum.isEmpty()) {
+                            listNum += letter.toString()
+                        } else {
+                            listNum[listNum.lastIndex] = listNum.last().plus(letter.toString())
+                        }
+                    }
+                    letterBefore = letter.toString()
+                } else {
+                    if (letterBefore in "+-*/") {
+                        Toast.makeText(this, "Invalid Operation Sequence!",Toast.LENGTH_SHORT).show()
+                        text.text.clear()
+                        return@setOnClickListener
+                    } else {
+                        listNum += letter.toString()
+                        letterBefore = letter.toString()
                     }
                 }
             }
+            println(listNum)
+            var firstNum = 0.0
+            var operator = ""
+            for(i in listNum) {
+                if (i in "+-*/" && listNum[0] == i) {
+                    Toast.makeText(this, "You can't start the equation with the $i operator!",Toast.LENGTH_SHORT).show()
+                    text.text.clear()
+                    return@setOnClickListener
+                }
+                if (i !in "+-*/√") {
+                    if (firstNum == 0.0 && operator == "") {
+                        firstNum = i.toDouble()
+                    } else if (operator != "") {
+                        when (operator) {
+                            "+" -> {
+                                firstNum += i.toDouble()
+                                operator = ""
+                            }
+                            "-" -> {
+                                firstNum -= i.toDouble()
+                                operator = ""
+                            }
+                            "*" -> {
+                                firstNum *= i.toDouble()
+                                operator = ""
+                            }
+                            "/" -> {
+                                if (i.toDouble() == 0.0) {
+                                    Toast.makeText(this, "You can't divide by 0!",Toast.LENGTH_SHORT).show()
+                                    text.text.clear()
+                                    return@setOnClickListener
+                                }
+                                firstNum /= i.toDouble()
+                                operator = ""
+                            }
+                            else -> {
+                                firstNum *= sqrt(i.toDouble())
+                                operator = ""
+                            }
+                        }
+                    }
+                } else if (operator == "√" && ans == "0.0s") {
+                    firstNum = sqrt(i.toDouble())
+                } else {
+                    if (operator == "") {
+                        operator = i
+                    }
+                }
+            }
+            ans = firstNum.toString()
+            text.setText(ans.toString())
+            ans += "s"
 
         }
 
