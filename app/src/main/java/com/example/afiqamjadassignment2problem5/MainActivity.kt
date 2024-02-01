@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     letterBefore = letter.toString()
                 } else {
-                    if (letterBefore in "+-*/") {
+                    if (letterBefore in "+-*/.") {
                         Toast.makeText(this, "Invalid Operation Sequence!",Toast.LENGTH_SHORT).show()
                         text.text.clear()
                         return@setOnClickListener
@@ -187,7 +187,21 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            println(listNum)
+            if (listNum.size == 1 && listNum[0] == ".") {
+                Toast.makeText(this, "You can't have only a decimal in the equation!",Toast.LENGTH_SHORT).show()
+                text.text.clear()
+                return@setOnClickListener
+            }
+            val checking = listNum[listNum.lastIndex]
+            if (checking in  "+-/*√" || checking == ".") {
+                if (checking == ".") {
+                    Toast.makeText(this, "You can't end the equation with only a decimal!",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "You can't end the equation with an operator!",Toast.LENGTH_SHORT).show()
+                }
+                text.text.clear()
+                return@setOnClickListener
+            }
             var firstNum = 0.0
             var operator = ""
             for(i in listNum) {
@@ -237,7 +251,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             ans = firstNum.toString()
-            text.setText(ans.toString())
+            text.setText(ans)
             ans += "s"
 
         }

@@ -17,4 +17,5 @@
     <string name="divide">\\</string>
     <string name="sqrt">sqrt</string>
     <string name="equals">=</string>
+    <string name="hint">Enter your equation.</string>
 </resources>
